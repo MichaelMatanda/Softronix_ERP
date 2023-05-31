@@ -16,3 +16,10 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
 
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mapping: false
+
+jwt:
+  secret: '[a-zA-Z0-9._]^+$Guidelines89797987forAlphabeticalArraNumericalsandOtherSymbo$'

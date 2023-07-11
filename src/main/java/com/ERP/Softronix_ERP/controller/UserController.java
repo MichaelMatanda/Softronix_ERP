@@ -16,8 +16,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
+
+import java.io.IOException;
 
 import static com.ERP.Softronix_ERP.constants.SecurityConstants.JWT_TOKEN_HEADER;
 
@@ -48,6 +51,19 @@ public class UserController extends ExceptionHandling {
     public ResponseEntity<User> registerUser(@RequestBody User user) throws EmailExistException, UserNotFoundException, UsernameExistException, MessagingException {
         User newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail());
         return new ResponseEntity<>(newUser, HttpStatus.OK);
+    }
+    @PostMapping("/add")
+    public ResponseEntity<User> addNewUser(@RequestParam("firstName") String firstName,
+                                           @RequestParam("lastName") String lastName,
+                                           @RequestParam("username") String username,
+                                           @RequestParam("email") String email,
+                                           @RequestParam("role") String role,
+                                           @RequestParam("isActive") String isActive,
+                                           @RequestParam("isNonLocked") String isNonLocked,
+                                           @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) throws UserNotFoundException, EmailExistException, IOException, UsernameExistException {
+        User newUser = userService.addNewUser(firstName, lastName, username, email, role, Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImage);
+        return new ResponseEntity<>(newUser, HttpStatus.OK);
+
     }
 
     private HttpHeaders getJwtHeader(UserPrincipal userPrincipal) {
